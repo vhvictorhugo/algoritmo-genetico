@@ -1,3 +1,5 @@
+# Referência e detalhamento do código: https://machinelearningmastery.com/simple-genetic-algorithm-from-scratch-in-python/
+
 # genetic algorithm search for continuous function optimization
 import numpy as np
 
