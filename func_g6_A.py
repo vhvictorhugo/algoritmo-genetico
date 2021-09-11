@@ -2,6 +2,7 @@
 
 # genetic algorithm search for continuous function optimization
 import numpy as np
+import matplotlib.pyplot as plt
 
 from numpy import asarray
 from numpy.random import randint
@@ -139,3 +140,11 @@ print(f"Mínimo: {min(scores)}")
 print(f"Máximo: {max(scores)}")
 print(f"Média: {np.mean(scores)}")
 print(f"Desvio Padrão: {np.std(scores)}")
+
+plt.boxplot(scores)
+plt.show()
+
+# Mínimo: -7950.713960289385
+# Máximo: -7950.1766629219055
+# Média: -7950.194572834154
+# Desvio Padrão: 0.09644782914386364
