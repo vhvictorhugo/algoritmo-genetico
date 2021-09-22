@@ -1,6 +1,7 @@
 # Referência e detalhamento do código: https://machinelearningmastery.com/simple-genetic-algorithm-from-scratch-in-python/
 
 # genetic algorithm search for continuous function optimization
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,21 +10,38 @@ from numpy.random import randint
 from numpy.random import rand
 
 INFACTIBLE = 9999999
+PD = 1800	# question 2
 
-#check if solution is factible
+#check if solution is factible - question 1
 def is_factible(child):
 	x1, x2 = child
 	g1 = -(x1 - 5) ** 2 - (x2 - 5) ** 2 + 100 <= 0
 	g2 = -(x1 - 6) ** 2 + (x2 - 5) ** 2 - 82.81 <= 0
 	return g1 and g2
 
-# objective function
-def objective(v):
+#check if solution is factible - question 2
+# def is_factible(child):
+# 	sum_of_pis = sum(child)
+# 	return sum_of_pis >= PD - 0.5 and sum_of_pis <= PD + 0.5
+
+# objective function - question 1
+def objective(v, parameters, bounds):
 	if(is_factible(v)):
 		x1, x2 = v
 		return (x1 - 10) ** 3 + (x2 - 20) ** 3
 	else:
 		return INFACTIBLE
+
+# objective function - question 2
+# def objective(v, parameters, bounds):
+
+# 	if(is_factible(v)):
+# 		solution = 0
+# 		for i in range(n_variables):
+# 			solution += parameters[i][0]*v[i]**2 + parameters[i][1]*v[i] + parameters[i][2] + abs(parameters[i][3] * math.sin(parameters[i][4] * (bounds[i][0] - v[i])))
+# 		return solution
+# 	else:
+# 		return INFACTIBLE
 
 # generate one subject - used in inicial solution
 def generate_subject(bounds, n_variables):
@@ -94,15 +112,17 @@ def generate_next_gen(selected, bounds, n_variables, r_cross, r_mut):
 	return children
 
 # genetic algorithm
-def genetic_algorithm(bounds, n_iter, n_pop, n_variables, r_cross, r_mut):
+def genetic_algorithm(bounds, parameters, n_iter, n_pop, n_variables, r_cross, r_mut):
 	# initial population - random
 	pop = generate_first_gen(bounds, n_pop, n_variables)
 	# keep track of best solution
-	best, best_eval = 0, objective(pop[0])
+	# best, best_eval = 0, objective(pop[0])	# q1
+	best, best_eval = 0, objective(pop[0], parameters, bounds)
 	# enumerate generations
 	for gen in range(n_iter):
 		# evaluate all candidates in the population
-		scores = [objective(d) for d in pop]
+		# scores = [objective(d) for d in pop]	# q1
+		scores = [objective(d, parameters, bounds) for d in pop]
 		# check for new best solution
 		for i in range(n_pop):
 			if scores[i] < best_eval:
@@ -114,12 +134,16 @@ def genetic_algorithm(bounds, n_iter, n_pop, n_variables, r_cross, r_mut):
 	return [best, best_eval]
  
 # define range for input
-bounds = asarray([[13, 100], [0, 100]])
+bounds = asarray([[13, 100], [0, 100]])	# question 1
+# bounds = asarray([[0, 680], [0, 360], [0, 360], [60, 180], [60, 180], [60, 180], [60, 180], [60, 180], [60, 180], [40, 120], [40, 120], [55, 120], [55, 120]])	# question 2
+# define parameters - question 2
+# constants = asarray([[0.00028, 8.1, 550, 300, 0.035], [0.00056, 8.1, 309, 200, 0.042], [0.00056, 8.1, 307, 150, 0.042], [0.00324, 7.74, 240, 150, 0.063], [0.00324, 7.74, 240, 150, 0.063], [0.00324, 7.74, 240, 150, 0.063], [0.00324, 7.74, 240, 150, 0.063], [0.00324, 7.74, 240, 150, 0.063], [0.00324, 7.74, 240, 150, 0.063], [0.00284, 8.6, 126, 100, 0.084], [0.00284, 8.6, 126, 100, 0.084], [0.00284, 8.6, 126, 100, 0.084], [0.00284, 8.6, 126, 100, 0.084]])
+constants = 0	# q1
 # define the total iterations
 n_iter = 200
 # define the population size
-n_pop = 400
-# define the number of decision variables
+n_pop = 500
+# define the number of decision variables - 2 for question 1 and 13 for question 2
 n_variables = 2
 # crossover rate
 r_cross = 0.9
@@ -130,7 +154,7 @@ scores = []
 
 for i in range(0, 30):
 	# perform the genetic algorithm search
-	best, score = genetic_algorithm(bounds, n_iter, n_pop, n_variables, r_cross, r_mut)
+	best, score = genetic_algorithm(bounds, constants, n_iter, n_pop, n_variables, r_cross, r_mut)
 	print('Done!')
 	print('f(%s) = %f' % (best, score))
 	scores.append(score)
