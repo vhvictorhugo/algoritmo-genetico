@@ -20,6 +20,8 @@ def is_factible(pi_l):
 # objective function
 def objective(vars):
 	pi_l = []; pimin_l = []; a_l = []; b_l = []; c_l = []; e_l = []; f_l = []
+	print(vars)
+	input("paused")
 
 	while(len(vars) > 0):
 		pi, pimin, a, b, c, e, f, *others = vars
@@ -110,6 +112,8 @@ def genetic_algorithm(objective, bounds, n_bits, n_iter, n_pop, r_cross, r_mut):
 	# initial population of random bitstring
 	pop = [randint(0, 2, n_bits*len(bounds)).tolist() for _ in range(n_pop)]
 	# keep track of best solution
+	for i in range(n_pop):
+		print(decode(bounds, n_bits, pop[i]))
 	best, best_eval = 0, objective(decode(bounds, n_bits, pop[0]))
 	# enumerate generations
 	for gen in range(n_iter):
@@ -164,7 +168,7 @@ n_iter = 100
 # bits per variable
 n_bits = 16
 # define the population size
-n_pop = 100
+n_pop = 1
 # crossover rate
 r_cross = 1.5
 # mutation rate

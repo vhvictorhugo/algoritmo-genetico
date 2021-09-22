@@ -3,7 +3,6 @@
 # genetic algorithm search for continuous function optimization
 import numpy as np
 import matplotlib.pyplot as plt
-import random
 
 from numpy import asarray
 from numpy.random import randint
@@ -71,17 +70,12 @@ def crossover(p1, p2, r_cross):
 
 # mutation operator - uniform mutation
 def mutation(child, bounds, n_variables, r_mut):
-	#print("child:", child)
-	#sigma = rand()
-	#print("sigma:", sigma)
 	# applying the perturbation
 	if rand() < r_mut:
 		random_value = np.random.uniform(-1.0, 1.0, n_variables) # random value between -1 and 1
-		#print("random:", random_value)
-		for i in range (n_variables):			
-			#child[i] = child[i] + (sigma)*(bounds[i][1] - bounds[i][0])*((random_value[i]))
-			child[i] = random_value[i]
-			#print("child mutaded:", child[i])
+		for i in range (n_variables):
+			if (bounds[i][0] <= child[i] + random_value[i] <= bounds[i][1]):	# determines if (new value + solution) is within bounds
+				child[i] += random_value[i]
 	return
 
 #generate child for next generation
@@ -115,18 +109,16 @@ def genetic_algorithm(bounds, n_iter, n_pop, n_variables, r_cross, r_mut):
 				best, best_eval = pop[i], scores[i]
 		# select parents
 		selected = [selection(pop, scores) for _ in range(n_pop)]
-		#print("selected:", selected)
 		# create the next generation
 		pop = generate_next_gen(selected, bounds, n_variables, r_cross, r_mut)
-		#print("next", pop)
 	return [best, best_eval]
  
 # define range for input
 bounds = asarray([[13, 100], [0, 100]])
 # define the total iterations
-n_iter = 100
+n_iter = 200
 # define the population size
-n_pop = 100
+n_pop = 400
 # define the number of decision variables
 n_variables = 2
 # crossover rate
@@ -135,10 +127,6 @@ r_cross = 0.9
 r_mut = 0.01
 
 scores = []
-
-# best, score = genetic_algorithm(bounds, n_iter, n_pop, n_variables, r_cross, r_mut)
-# print('Done!')
-# print('f(%s) = %f' % (best, score))
 
 for i in range(0, 30):
 	# perform the genetic algorithm search
@@ -154,9 +142,3 @@ print(f"Desvio Padrão: {np.std(scores)}")
 
 plt.boxplot(scores)
 plt.show()
-
-# valores antigos (binary-coded)
-# Mínimo: -7950.713960289385
-# Máximo: -7950.1766629219055
-# Média: -7950.194572834154
-# Desvio Padrão: 0.09644782914386364
