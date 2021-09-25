@@ -119,11 +119,11 @@ n_iter = 200
 # bits per variable
 n_bits = 16
 # define the population size
-n_pop = 300
+n_pop = 100
 # crossover rate
-r_cross = 1.5
+r_cross = 0.9
 # mutation rate
-r_mut = 0.6 / (float(n_bits) * len(bounds))
+r_mut = 1.0 / (float(n_bits) * len(bounds))
 
 
 scores = []
@@ -144,7 +144,7 @@ print(f"Desvio Padrão: {np.std(scores)}")
 plt.boxplot(scores)
 plt.show()
 
-# Mínimo: -7950.9277929518
+# Mínimo: -7950.1766629219055
 # Máximo: -7950.1766629219055
-# Média: -7950.226796472102
-# Desvio Padrão: 0.1628122601000354
+# Média: -7950.1766629219055
+# Desvio Padrão: 0.0
