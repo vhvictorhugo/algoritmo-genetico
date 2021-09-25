@@ -123,7 +123,7 @@ constants = asarray([[0.00028, 8.1, 550, 300, 0.035], [0.00056, 8.1, 309, 200, 0
 # define the total iterations
 n_iter = 1000
 # define the population size
-n_pop = 1000
+n_pop = 500
 # define the number of decision variables
 n_variables = 13
 # crossover rate
